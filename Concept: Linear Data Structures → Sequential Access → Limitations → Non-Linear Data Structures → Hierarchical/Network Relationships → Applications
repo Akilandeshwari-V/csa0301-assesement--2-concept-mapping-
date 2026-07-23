@@ -1,0 +1,158 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 5
+
+// ---------- Product Structure ----------
+struct Product
+{
+    int id;
+    char name[30];
+    float price;
+};
+
+// ---------- Linked List ----------
+struct Node
+{
+    struct Product data;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+void insertProduct(int id, char name[], float price)
+{
+    struct Node *newNode, *temp;
+
+    newNode = (struct Node *)malloc(sizeof(struct Node));
+
+    newNode->data.id = id;
+    strcpy(newNode->data.name, name);
+    newNode->data.price = price;
+    newNode->next = NULL;
+
+    if(head == NULL)
+        head = newNode;
+    else
+    {
+        temp = head;
+        while(temp->next != NULL)
+            temp = temp->next;
+        temp->next = newNode;
+    }
+}
+
+void displayList()
+{
+    struct Node *temp = head;
+
+    printf("\nProducts in Linked List:\n");
+
+    while(temp != NULL)
+    {
+        printf("ID:%d  Name:%s  Price:%.2f\n",
+               temp->data.id,
+               temp->data.name,
+               temp->data.price);
+
+        temp = temp->next;
+    }
+}
+
+// ---------- Binary Search Tree ----------
+struct Tree
+{
+    struct Product data;
+    struct Tree *left;
+    struct Tree *right;
+};
+
+struct Tree *createNode(struct Product p)
+{
+    struct Tree *newNode;
+
+    newNode = (struct Tree *)malloc(sizeof(struct Tree));
+
+    newNode->data = p;
+    newNode->left = NULL;
+    newNode->right = NULL;
+
+    return newNode;
+}
+
+struct Tree *insertBST(struct Tree *root, struct Product p)
+{
+    if(root == NULL)
+        return createNode(p);
+
+    if(p.id < root->data.id)
+        root->left = insertBST(root->left, p);
+    else
+        root->right = insertBST(root->right, p);
+
+    return root;
+}
+
+void inorder(struct Tree *root)
+{
+    if(root != NULL)
+    {
+        inorder(root->left);
+
+        printf("ID:%d  Name:%s  Price:%.2f\n",
+               root->data.id,
+               root->data.name,
+               root->data.price);
+
+        inorder(root->right);
+    }
+}
+
+int main()
+{
+    int i;
+
+    // ---------- Array ----------
+    struct Product products[MAX] =
+    {
+        {101,"Laptop",65000},
+        {102,"Mobile",25000},
+        {103,"Headphone",2000},
+        {104,"Keyboard",1500},
+        {105,"Mouse",700}
+    };
+
+    printf("Products Stored in Array:\n");
+
+    for(i=0;i<MAX;i++)
+    {
+        printf("ID:%d  Name:%s  Price:%.2f\n",
+               products[i].id,
+               products[i].name,
+               products[i].price);
+    }
+
+    // ---------- Linked List ----------
+    for(i=0;i<MAX;i++)
+    {
+        insertProduct(products[i].id,
+                      products[i].name,
+                      products[i].price);
+    }
+
+    displayList();
+
+    // ---------- Binary Search Tree ----------
+    struct Tree *root = NULL;
+
+    for(i=0;i<MAX;i++)
+    {
+        root = insertBST(root, products[i]);
+    }
+
+    printf("\nProducts in Binary Search Tree (Inorder):\n");
+    inorder(root);
+
+    return 0;
+}
