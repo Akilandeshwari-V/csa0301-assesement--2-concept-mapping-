@@ -1,0 +1,181 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX 5
+
+// ---------- Array ----------
+char songs[MAX][30] =
+{
+    "Song A",
+    "Song B",
+    "Song C",
+    "Song D",
+    "Song E"
+};
+
+// ---------- Linked List ----------
+struct Node
+{
+    char song[30];
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+// ---------- Stack ----------
+char stack[MAX][30];
+int top = -1;
+
+// ---------- Queue ----------
+char queue[MAX][30];
+int front = -1, rear = -1;
+
+// Linked List Insert
+void insertSong(char name[])
+{
+    struct Node *newNode, *temp;
+
+    newNode = (struct Node *)malloc(sizeof(struct Node));
+
+    strcpy(newNode->song, name);
+    newNode->next = NULL;
+
+    if(head == NULL)
+        head = newNode;
+    else
+    {
+        temp = head;
+
+        while(temp->next != NULL)
+            temp = temp->next;
+
+        temp->next = newNode;
+    }
+}
+
+// Linked List Delete
+void deleteSong()
+{
+    struct Node *temp;
+
+    if(head == NULL)
+    {
+        printf("\nPlaylist is Empty!\n");
+        return;
+    }
+
+    temp = head;
+    head = head->next;
+
+    printf("\nDeleted Song : %s\n", temp->song);
+
+    free(temp);
+}
+
+// Display Playlist
+void displayPlaylist()
+{
+    struct Node *temp = head;
+
+    printf("\nPlaylist:\n");
+
+    while(temp != NULL)
+    {
+        printf("%s\n", temp->song);
+        temp = temp->next;
+    }
+}
+
+// Stack Push
+void push(char name[])
+{
+    if(top == MAX-1)
+    {
+        printf("\nStack Full!\n");
+        return;
+    }
+
+    top++;
+    strcpy(stack[top], name);
+}
+
+// Stack Pop
+void pop()
+{
+    if(top == -1)
+    {
+        printf("\nNo Recently Played Songs!\n");
+        return;
+    }
+
+    printf("\nRecently Played Removed : %s\n", stack[top]);
+    top--;
+}
+
+// Queue Enqueue
+void enqueue(char name[])
+{
+    if(rear == MAX-1)
+    {
+        printf("\nQueue Full!\n");
+        return;
+    }
+
+    if(front == -1)
+        front = 0;
+
+    rear++;
+    strcpy(queue[rear], name);
+}
+
+// Queue Dequeue
+void dequeue()
+{
+    if(front == -1 || front > rear)
+    {
+        printf("\nQueue Empty!\n");
+        return;
+    }
+
+    printf("\nNow Playing : %s\n", queue[front]);
+    front++;
+}
+
+int main()
+{
+    int i;
+
+    printf("===== MUSIC STREAMING APPLICATION =====\n");
+
+    // Array
+    printf("\nSongs Stored in Array:\n");
+
+    for(i = 0; i < MAX; i++)
+        printf("%s\n", songs[i]);
+
+    // Linked List
+    insertSong("Song A");
+    insertSong("Song B");
+    insertSong("Song C");
+
+    displayPlaylist();
+
+    deleteSong();
+
+    displayPlaylist();
+
+    // Stack
+    push("Song C");
+    push("Song B");
+
+    pop();
+
+    // Queue
+    enqueue("Song D");
+    enqueue("Song E");
+
+    dequeue();
+
+    return 0;
+}
