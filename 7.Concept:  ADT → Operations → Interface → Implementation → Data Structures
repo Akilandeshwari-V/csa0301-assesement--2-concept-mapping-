@@ -1,0 +1,62 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for Folder (Tree Node)
+struct Folder
+{
+    char name[30];
+    struct Folder *left;
+    struct Folder *right;
+};
+
+// Create a New Folder
+struct Folder *createFolder(char name[])
+{
+    struct Folder *newFolder;
+
+    newFolder = (struct Folder *)malloc(sizeof(struct Folder));
+
+    strcpy(newFolder->name, name);
+
+    newFolder->left = NULL;
+    newFolder->right = NULL;
+
+    return newFolder;
+}
+
+// Recursive Function to Display Folder Structure
+void displayFolders(struct Folder *root)
+{
+    // Base Case
+    if(root == NULL)
+        return;
+
+    // Process Current Folder
+    printf("%s\n", root->name);
+
+    // Recursive Calls
+    displayFolders(root->left);
+    displayFolders(root->right);
+}
+
+int main()
+{
+    struct Folder *root;
+
+    root = createFolder("Root");
+
+    root->left = createFolder("Documents");
+    root->right = createFolder("Downloads");
+
+    root->left->left = createFolder("Projects");
+    root->left->right = createFolder("Assignments");
+
+    root->right->left = createFolder("Images");
+    root->right->right = createFolder("Videos");
+
+    printf("===== File System Hierarchy =====\n\n");
+
+    displayFolders(root);
+
+    return 0;
+}
