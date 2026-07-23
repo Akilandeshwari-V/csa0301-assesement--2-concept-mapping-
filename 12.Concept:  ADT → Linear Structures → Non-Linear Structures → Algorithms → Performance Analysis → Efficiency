@@ -1,0 +1,84 @@
+#include <stdio.h>
+
+#define MAX 5
+
+// -------- Queue (Linear Structure) --------
+int queue[MAX];
+int front = -1, rear = -1;
+
+// Graph (Non-Linear Structure)
+int graph[MAX][MAX] =
+{
+    {0,1,1,0,0},
+    {1,0,1,1,0},
+    {1,1,0,0,1},
+    {0,1,0,0,1},
+    {0,0,1,1,0}
+};
+
+// ADT Operation - Enqueue Ride Request
+void enqueue(int requestID)
+{
+    if(rear == MAX - 1)
+    {
+        printf("Queue Overflow\n");
+        return;
+    }
+
+    if(front == -1)
+        front = 0;
+
+    queue[++rear] = requestID;
+    printf("Ride Request %d Added\n", requestID);
+}
+
+// ADT Operation - Allocate Driver
+void allocateDriver()
+{
+    if(front == -1 || front > rear)
+    {
+        printf("No Ride Requests Available\n");
+        return;
+    }
+
+    printf("Driver Allocated to Request %d\n", queue[front]);
+    front++;
+}
+
+// Display Road Network
+void displayGraph()
+{
+    int i, j;
+
+    printf("\nRoad Network (Graph):\n");
+
+    for(i = 0; i < MAX; i++)
+    {
+        for(j = 0; j < MAX; j++)
+        {
+            printf("%d ", graph[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main()
+{
+    enqueue(101);
+    enqueue(102);
+    enqueue(103);
+
+    printf("\nAllocating Drivers...\n");
+
+    allocateDriver();
+    allocateDriver();
+
+    displayGraph();
+
+    printf("\nPerformance Analysis\n");
+    printf("---------------------------\n");
+    printf("Queue Operations : O(1)\n");
+    printf("Graph Traversal (DFS/BFS) : O(V + E)\n");
+
+    return 0;
+}
