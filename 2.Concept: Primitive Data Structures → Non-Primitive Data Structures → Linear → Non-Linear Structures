@@ -1,0 +1,136 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX 5
+
+// ---------- Linked List ----------
+struct Node
+{
+    int vehicleID;
+    struct Node *next;
+};
+
+struct Node *head = NULL;
+
+void insertVehicle(int id)
+{
+    struct Node *newNode;
+
+    newNode = (struct Node *)malloc(sizeof(struct Node));
+
+    newNode->vehicleID = id;
+    newNode->next = NULL;
+
+    if(head == NULL)
+        head = newNode;
+    else
+    {
+        struct Node *temp = head;
+        while(temp->next != NULL)
+            temp = temp->next;
+        temp->next = newNode;
+    }
+}
+
+void displayList()
+{
+    struct Node *temp = head;
+
+    printf("\nVehicle Movement (Linked List):\n");
+
+    while(temp != NULL)
+    {
+        printf("%d -> ", temp->vehicleID);
+        temp = temp->next;
+    }
+
+    printf("NULL\n");
+}
+
+// ---------- Binary Tree ----------
+struct Tree
+{
+    int junction;
+    struct Tree *left;
+    struct Tree *right;
+};
+
+struct Tree *createNode(int value)
+{
+    struct Tree *newNode;
+
+    newNode = (struct Tree *)malloc(sizeof(struct Tree));
+
+    newNode->junction = value;
+    newNode->left = NULL;
+    newNode->right = NULL;
+
+    return newNode;
+}
+
+void inorder(struct Tree *root)
+{
+    if(root != NULL)
+    {
+        inorder(root->left);
+        printf("%d ", root->junction);
+        inorder(root->right);
+    }
+}
+
+// ---------- Main ----------
+int main()
+{
+    int i, j;
+
+    // Primitive Structure (Array)
+    int vehicles[MAX] = {101,102,103,104,105};
+
+    printf("Vehicle IDs (Array):\n");
+
+    for(i=0;i<MAX;i++)
+        printf("%d ",vehicles[i]);
+
+    printf("\n");
+
+    // Linked List
+    insertVehicle(101);
+    insertVehicle(102);
+    insertVehicle(103);
+    insertVehicle(104);
+
+    displayList();
+
+    // Binary Tree
+    struct Tree *root = createNode(50);
+    root->left = createNode(30);
+    root->right = createNode(70);
+    root->left->left = createNode(20);
+    root->left->right = createNode(40);
+
+    printf("\nRoad Hierarchy (Tree - Inorder):\n");
+    inorder(root);
+
+    // Graph (Adjacency Matrix)
+    int graph[MAX][MAX] =
+    {
+        {0,1,1,0,0},
+        {1,0,1,1,0},
+        {1,1,0,0,1},
+        {0,1,0,0,1},
+        {0,0,1,1,0}
+    };
+
+    printf("\n\nRoad Network (Graph):\n");
+
+    for(i=0;i<MAX;i++)
+    {
+        for(j=0;j<MAX;j++)
+        {
+            printf("%d ",graph[i][j]);
+        }
+        printf("\n");
+    }
+
+    return 0;
+}
