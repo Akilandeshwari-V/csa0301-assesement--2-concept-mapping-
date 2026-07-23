@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <time.h>
+
+#define MAX 100
+
+int linearSearch(int drivers[], int n, int key)
+{
+    int i;
+
+    for(i = 0; i < n; i++)
+    {
+        if(drivers[i] == key)
+            return i;
+    }
+
+    return -1;
+}
+
+int main()
+{
+    int drivers[MAX];
+    int n, i, key, result;
+
+    clock_t start, end;
+    double time_taken;
+
+    printf("===== Ride Sharing Application =====\n");
+
+    printf("Enter number of drivers: ");
+    scanf("%d", &n);
+
+    printf("Enter Driver IDs:\n");
+
+    for(i = 0; i < n; i++)
+        scanf("%d", &drivers[i]);
+
+    printf("Enter Driver ID to Search: ");
+    scanf("%d", &key);
+
+    start = clock();
+
+    result = linearSearch(drivers, n, key);
+
+    end = clock();
+
+    time_taken = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    if(result == -1)
+        printf("\nDriver Not Found.\n");
+    else
+        printf("\nDriver Found at Position %d\n", result + 1);
+
+    printf("\nPerformance Analysis\n");
+    printf("-------------------------\n");
+    printf("Input Size (n)      : %d\n", n);
+    printf("Time Complexity     : O(n)\n");
+    printf("Space Complexity    : O(1)\n");
+    printf("Execution Time      : %lf seconds\n", time_taken);
+
+    return 0;
+}
