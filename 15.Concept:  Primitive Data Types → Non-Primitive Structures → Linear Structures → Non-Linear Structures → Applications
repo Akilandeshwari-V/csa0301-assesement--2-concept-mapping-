@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// -------- Structure --------
+struct Weather
+{
+    int stationID;
+    float temperature;
+    float humidity;
+    float windSpeed;
+};
+
+// -------- Binary Tree --------
+struct Tree
+{
+    struct Weather data;
+    struct Tree *left;
+    struct Tree *right;
+};
+
+// Create Tree Node
+struct Tree *createNode(struct Weather w)
+{
+    struct Tree *newNode;
+
+    newNode = (struct Tree *)malloc(sizeof(struct Tree));
+
+    newNode->data = w;
+    newNode->left = NULL;
+    newNode->right = NULL;
+
+    return newNode;
+}
+
+// Insert into BST using Station ID
+struct Tree *insert(struct Tree *root, struct Weather w)
+{
+    if(root == NULL)
+        return createNode(w);
+
+    if(w.stationID < root->data.stationID)
+        root->left = insert(root->left, w);
+    else
+        root->right = insert(root->right, w);
+
+    return root;
+}
+
+// Inorder Traversal
+void inorder(struct Tree *root)
+{
+    if(root != NULL)
+    {
+        inorder(root->left);
+
+        printf("Station ID : %d\n", root->data.stationID);
+        printf("Temperature: %.1f C\n", root->data.temperature);
+        printf("Humidity   : %.1f %%\n", root->data.humidity);
+        printf("Wind Speed : %.1f km/h\n\n", root->data.windSpeed);
+
+        inorder(root->right);
+    }
+}
+
+int main()
+{
+    int i;
+
+    // Linear Structure (Array)
+    struct Weather station[5] =
+    {
+        {101, 30.5, 65.2, 12.5},
+        {102, 28.7, 70.1, 10.0},
+        {103, 32.4, 60.5, 15.2},
+        {104, 29.8, 68.3, 11.8},
+        {105, 31.2, 62.4, 14.0}
+    };
+
+    printf("===== WEATHER MONITORING SYSTEM =====\n");
+
+    printf("\nWeather Data Stored in Array:\n\n");
+
+    for(i = 0; i < 5; i++)
+    {
+        printf("Station ID : %d\n", station[i].stationID);
+        printf("Temperature: %.1f C\n", station[i].temperature);
+        printf("Humidity   : %.1f %%\n", station[i].humidity);
+        printf("Wind Speed : %.1f km/h\n\n", station[i].windSpeed);
+    }
+
+    // Non-Linear Structure (BST)
+    struct Tree *root = NULL;
+
+    for(i = 0; i < 5; i++)
+    {
+        root = insert(root, station[i]);
+    }
+
+    printf("Weather Data in Binary Search Tree (Inorder):\n\n");
+    inorder(root);
+
+    return 0;
+}
